@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+test -z "$LAG_CONFFILE" && LAG_CONFFILE=~/.lag
+me="$(realpath "$0")"
+function getExecutable(){
+    while (( "$#" )); do
+      echo "$1"
+      shift
+      if [ "$1" == "--" ]; then
+        break
+      fi
+    done \
+     | sort --sort=v | tail -n1
+}
+
+MY_NAME="$(basename "$0")"
+
+if [ "$1" == "pollute" ]; then
+    test -d "$2" || echo "\$2 needs to be a directory to pollute into"
+    test -d "$2" || exit 1
+    export lag
+    declare -A lag
+    . "$LAG_CONFFILE"
+
+    for K in "${!lag[@]}"; do
+        test -h "$2/$K" && unlink "$2/$K"
+        ln -s "$me" "$2/$K"
+    done
+    exit
+fi
+
+
+if [ "$MY_NAME" == "lag" ]; then
+  executable=$(getExecutable "$@")
+  while (( "$#" )); do
+    if [ "$1" == "--" ]; then
+        shift
+        break
+    fi
+    shift
+    done
+  "$executable" "$@"
+  exit $?
+fi
+
+
+export lag
+declare -A lag
+. "$LAG_CONFFILE"
+# shellcheck disable=SC2086
+"$me" ${lag[$MY_NAME]} -- "$@"
