@@ -2,21 +2,21 @@
 
 test -z "$LAG_CONFFILE" && LAG_CONFFILE=~/.lag
 me="$(realpath "$0")"
-function getExecutable(){
-    while (( "$#" )); do
-      echo "$1"
-      shift
-      if [ "$1" == "--" ]; then
-        break
-      fi
-    done \
-     | sort --sort=v | tail -n1
+function getExecutable() {
+    while (($#)); do
+        echo "$1"
+        shift
+        if [ "$1" == "--" ]; then
+            break
+        fi
+    done |
+        sort --sort=v | tail -n1
 }
 
 MY_NAME="$(basename "$0")"
 
 if [ "$1" == "pollute" ]; then
-    test -d "$2" || echo "\$2 needs to be a directory to pollute into"
+    test -d "$2" || echo '$2 needs to be a directory to pollute into'
     test -d "$2" || exit 1
     export lag
     declare -A lag
@@ -29,20 +29,18 @@ if [ "$1" == "pollute" ]; then
     exit
 fi
 
-
 if [ "$MY_NAME" == "lag" ]; then
-  executable=$(getExecutable "$@")
-  while (( "$#" )); do
-    if [ "$1" == "--" ]; then
+    executable=$(getExecutable "$@")
+    while (($#)); do
+        if [ "$1" == "--" ]; then
+            shift
+            break
+        fi
         shift
-        break
-    fi
-    shift
     done
-  "$executable" "$@"
-  exit $?
+    "$executable" "$@"
+    exit $?
 fi
-
 
 export lag
 declare -A lag
