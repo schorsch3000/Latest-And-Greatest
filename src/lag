@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -x
 test -z "$LAG_CONFFILE" && LAG_CONFFILE=~/.lag
 export lag
 declare -A lag
@@ -12,7 +13,8 @@ if [ "$#" -eq 0 ]; then
         printf "%q" "$name"
         echo "'"
     done
-fi
-if [ "$#" -eq 1 ]; then
-    "$(ls -1 ${lag[$1]} | sort -V | tail -1)" "$@" &
+else
+    cmd="$1"
+    shift
+    "$(ls -1 ${lag[$cmd]} | sort -V | tail -1)" "$@" &
 fi

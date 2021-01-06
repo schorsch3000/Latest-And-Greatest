@@ -14,6 +14,6 @@ alias cura='/home/me/github/schorsch3000/Latest-And-Greatest/src/lag cura'
 alias idea='/home/me/github/schorsch3000/Latest-And-Greatest/src/lag idea'
 ```
 
-so you should add something like `lag | . /dev/stdin` to your .bashrc
+so you should add something like `eval "$(lag)"` to your .bashrc
 
 running eg. cura after your sources the output of `lag` rund the latest version matching the glob from the configfile (using sort --version-sort) 
